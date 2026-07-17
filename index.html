@@ -9856,7 +9856,7 @@ function StatBlock({
 // ============ COMPONENT ============
 function SixRings() {
   const [phase, setPhase] = useState("modeSelect"); // modeSelect | coachSelect | draft | ready | simming | results
-  const [mode, setMode] = useState(null); // 'easy' | 'hard'
+  const [mode, setMode] = useState(null); // 'easy' | 'hard' | 'impossible'
   const [pool, setPool] = useState(DRAFT_CLASSES);
   const [roster, setRoster] = useState([]);
   const [coach, setCoach] = useState(null);
@@ -10028,10 +10028,13 @@ function SixRings() {
         .modeBtn { flex: 1; min-width: 200px; background: #1C2530; border: 1.5px solid #2A3340; border-radius: 10px; padding: 20px 18px; cursor: pointer; text-align: left; transition: border-color 0.15s ease, background 0.15s ease; }
         .modeBtn:hover { border-color: #D9A441; background: #232D3A; }
         .modeBtn.hard:hover { border-color: #C1443A; }
+        .modeBtn.impossible:hover { border-color: #EDE6D6; }
         .modeName { font-family: 'Anton', sans-serif; font-size: 26px; letter-spacing: 1px; color: #D9A441; margin-bottom: 8px; }
         .modeBtn.hard .modeName { color: #C1443A; }
+        .modeBtn.impossible .modeName { color: #EDE6D6; }
         .modeDesc { font-size: 13px; line-height: 1.5; color: #8B96A5; }
         .hardBanner { background: rgba(193,68,58,0.12); border: 1px solid rgba(193,68,58,0.4); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12.5px; color: #E0958E; text-align: center; }
+        .impossibleBanner { background: rgba(237,230,214,0.08); border: 1px solid rgba(237,230,214,0.3); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12.5px; color: #C9D0DA; text-align: center; }
         .coachActions { display: flex; justify-content: center; gap: 10px; margin-top: 14px; }
         .coachBtnGold { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 14px; background: #D9A441; color: #1a1204; border: none; border-radius: 8px; padding: 11px 22px; cursor: pointer; }
         .coachBtnGold:hover:not(:disabled) { background: #E8BE5E; }
@@ -10190,7 +10193,18 @@ function SixRings() {
     className: "modeName"
   }, "HARD"), /*#__PURE__*/React.createElement("div", {
     className: "modeDesc"
-  }, "Draft blind — no ratings, bars, or grades. You pick on names and reputation alone. Everything is revealed once your five is locked.")))), phase === "coachSelect" ? /*#__PURE__*/React.createElement("div", {
+  }, "Draft blind — no ratings, bars, or grades. You pick on names and reputation alone. Everything is revealed once your five is locked.")), /*#__PURE__*/React.createElement("button", {
+    className: "modeBtn impossible",
+    onClick: () => {
+      setMode("impossible");
+      setPhase("coachSelect");
+      spinCoach();
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "modeName"
+  }, "IMPOSSIBLE"), /*#__PURE__*/React.createElement("div", {
+    className: "modeDesc"
+  }, "No names. No ratings. Just position and real draft-pick number. If you know the actual draft order, prove it. Everything is revealed once your five is locked.")))), phase === "coachSelect" ? /*#__PURE__*/React.createElement("div", {
     className: "card",
     style: {
       marginBottom: 18
@@ -10268,7 +10282,9 @@ function SixRings() {
     }, /*#__PURE__*/React.createElement("b", null, s.label), " ", filled, "/", SLOT_NEED[s.key]);
   })), mode === "hard" && /*#__PURE__*/React.createElement("div", {
     className: "hardBanner"
-  }, "HARD MODE — ratings hidden. Draft on names alone; all stats reveal once your five is locked."), mode !== "hard" && /*#__PURE__*/React.createElement("div", {
+  }, "HARD MODE — ratings hidden. Draft on names alone; all stats reveal once your five is locked."), mode === "impossible" && /*#__PURE__*/React.createElement("div", {
+    className: "impossibleBanner"
+  }, "IMPOSSIBLE MODE — no names, no ratings. Only position and real pick number. Everything reveals once your five is locked."), mode === "easy" && /*#__PURE__*/React.createElement("div", {
     className: "legendRow"
   }, /*#__PURE__*/React.createElement("div", {
     className: "legendItem",
@@ -10308,7 +10324,7 @@ function SixRings() {
     className: "slotTag " + p.slot
   }, p.slot), /*#__PURE__*/React.createElement("span", {
     className: "name"
-  }, p.name), p.grade && mode !== "hard" && /*#__PURE__*/React.createElement("span", {
+  }, mode === "impossible" ? "?" : p.name), p.grade && mode === "easy" && /*#__PURE__*/React.createElement("span", {
     className: "gradeBadge",
     style: {
       color: gradeColor(p.grade),
@@ -10319,7 +10335,7 @@ function SixRings() {
   }, "POT"), p.grade), /*#__PURE__*/React.createElement(StatBlock, {
     player: p,
     compact: true,
-    hidden: mode === "hard"
+    hidden: mode === "hard" || mode === "impossible"
   }), /*#__PURE__*/React.createElement("span", {
     className: "pk"
   }, "#", p.pick), /*#__PURE__*/React.createElement("span", {
@@ -10357,11 +10373,11 @@ function SixRings() {
       className: "left"
     }, /*#__PURE__*/React.createElement("span", {
       className: "nameRow"
-    }, /*#__PURE__*/React.createElement("span", null, p.name), /*#__PURE__*/React.createElement("span", {
+    }, mode !== "impossible" && /*#__PURE__*/React.createElement("span", null, p.name), /*#__PURE__*/React.createElement("span", {
       className: "posTag"
     }, p.pos.join("/")), /*#__PURE__*/React.createElement("span", {
       className: "pickTag"
-    }, "#", p.pick), p.grade && mode !== "hard" && /*#__PURE__*/React.createElement("span", {
+    }, "#", p.pick), p.grade && mode === "easy" && /*#__PURE__*/React.createElement("span", {
       className: "gradeBadge",
       style: {
         color: gradeColor(p.grade),
@@ -10373,11 +10389,11 @@ function SixRings() {
       className: "posTag"
     }, reason)), /*#__PURE__*/React.createElement(StatBlock, {
       player: p,
-      hidden: mode === "hard"
+      hidden: mode === "hard" || mode === "impossible"
     })));
   }))), pendingChoice && /*#__PURE__*/React.createElement("div", {
     className: "chooseSlot"
-  }, /*#__PURE__*/React.createElement("p", null, pendingChoice.player.name, " can play either position — sign him as:"), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("p", null, mode === "impossible" ? `Pick #${pendingChoice.player.pick}` : pendingChoice.player.name, " can play either position — sign him as:"), /*#__PURE__*/React.createElement("div", {
     className: "chooseRow"
   }, pendingChoice.options.map(slot => /*#__PURE__*/React.createElement("button", {
     key: slot,

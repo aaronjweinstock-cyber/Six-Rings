@@ -1513,7 +1513,7 @@ function StatBlock({ player, compact, hidden }) {
 // ============ COMPONENT ============
 export default function SixRings() {
   const [phase, setPhase] = useState("modeSelect"); // modeSelect | coachSelect | draft | ready | simming | results
-  const [mode, setMode] = useState(null); // 'easy' | 'hard'
+  const [mode, setMode] = useState(null); // 'easy' | 'hard' | 'impossible'
   const [pool, setPool] = useState(DRAFT_CLASSES);
   const [roster, setRoster] = useState([]);
   const [coach, setCoach] = useState(null);
@@ -1691,10 +1691,13 @@ export default function SixRings() {
         .modeBtn { flex: 1; min-width: 200px; background: #1C2530; border: 1.5px solid #2A3340; border-radius: 10px; padding: 20px 18px; cursor: pointer; text-align: left; transition: border-color 0.15s ease, background 0.15s ease; }
         .modeBtn:hover { border-color: #D9A441; background: #232D3A; }
         .modeBtn.hard:hover { border-color: #C1443A; }
+        .modeBtn.impossible:hover { border-color: #EDE6D6; }
         .modeName { font-family: 'Anton', sans-serif; font-size: 26px; letter-spacing: 1px; color: #D9A441; margin-bottom: 8px; }
         .modeBtn.hard .modeName { color: #C1443A; }
+        .modeBtn.impossible .modeName { color: #EDE6D6; }
         .modeDesc { font-size: 13px; line-height: 1.5; color: #8B96A5; }
         .hardBanner { background: rgba(193,68,58,0.12); border: 1px solid rgba(193,68,58,0.4); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12.5px; color: #E0958E; text-align: center; }
+        .impossibleBanner { background: rgba(237,230,214,0.08); border: 1px solid rgba(237,230,214,0.3); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12.5px; color: #C9D0DA; text-align: center; }
         .coachActions { display: flex; justify-content: center; gap: 10px; margin-top: 14px; }
         .coachBtnGold { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 14px; background: #D9A441; color: #1a1204; border: none; border-radius: 8px; padding: 11px 22px; cursor: pointer; }
         .coachBtnGold:hover:not(:disabled) { background: #E8BE5E; }
@@ -1805,6 +1808,10 @@ export default function SixRings() {
                 <div className="modeName">HARD</div>
                 <div className="modeDesc">Draft blind — no ratings, bars, or grades. You pick on names and reputation alone. Everything is revealed once your five is locked.</div>
               </button>
+              <button className="modeBtn impossible" onClick={() => { setMode("impossible"); setPhase("coachSelect"); spinCoach(); }}>
+                <div className="modeName">IMPOSSIBLE</div>
+                <div className="modeDesc">No names. No ratings. Just position and real draft-pick number. If you know the actual draft order, prove it. Everything is revealed once your five is locked.</div>
+              </button>
             </div>
           </div>
         )}
@@ -1869,8 +1876,11 @@ export default function SixRings() {
               {mode === "hard" && (
                 <div className="hardBanner">HARD MODE &mdash; ratings hidden. Draft on names alone; all stats reveal once your five is locked.</div>
               )}
+              {mode === "impossible" && (
+                <div className="impossibleBanner">IMPOSSIBLE MODE &mdash; no names, no ratings. Only position and real pick number. Everything reveals once your five is locked.</div>
+              )}
 
-              {mode !== "hard" && (
+              {mode === "easy" && (
               <div className="legendRow">
                 <div className="legendItem" style={{ color: "#D9A441" }}>
                   <b style={{ fontFamily: "'Anton', sans-serif", fontSize: 13 }}>##</b> OVR
@@ -1892,9 +1902,9 @@ export default function SixRings() {
                   {byPosition(roster).map((p, i) => (
                     <div className="rosterItem" key={p.name}>
                       <span className={"slotTag " + p.slot}>{p.slot}</span>
-                      <span className="name">{p.name}</span>
-                      {p.grade && mode !== "hard" && <span className="gradeBadge" style={{ color: gradeColor(p.grade), borderColor: gradeColor(p.grade) }}><span className="potTag">POT</span>{p.grade}</span>}
-                      <StatBlock player={p} compact hidden={mode === "hard"} />
+                      <span className="name">{mode === "impossible" ? "?" : p.name}</span>
+                      {p.grade && mode === "easy" && <span className="gradeBadge" style={{ color: gradeColor(p.grade), borderColor: gradeColor(p.grade) }}><span className="potTag">POT</span>{p.grade}</span>}
+                      <StatBlock player={p} compact hidden={mode === "hard" || mode === "impossible"} />
                       <span className="pk">#{p.pick}</span>
                       <span className="yr">{p.classYear}</span>
                     </div>
@@ -1928,13 +1938,13 @@ export default function SixRings() {
                           <button key={p.name} className="playerBtn" disabled={!ok} onClick={() => attemptDraft(p)}>
                             <span className="left">
                               <span className="nameRow">
-                                <span>{p.name}</span>
+                                {mode !== "impossible" && <span>{p.name}</span>}
                                 <span className="posTag">{p.pos.join("/")}</span>
                                 <span className="pickTag">#{p.pick}</span>
-                                {p.grade && mode !== "hard" && <span className="gradeBadge" style={{ color: gradeColor(p.grade), borderColor: gradeColor(p.grade) }}><span className="potTag">POT</span>{p.grade}</span>}
+                                {p.grade && mode === "easy" && <span className="gradeBadge" style={{ color: gradeColor(p.grade), borderColor: gradeColor(p.grade) }}><span className="potTag">POT</span>{p.grade}</span>}
                                 {reason && <span className="posTag">{reason}</span>}
                               </span>
-                              <StatBlock player={p} hidden={mode === "hard"} />
+                              <StatBlock player={p} hidden={mode === "hard" || mode === "impossible"} />
                             </span>
                           </button>
                         );
@@ -1946,7 +1956,7 @@ export default function SixRings() {
 
               {pendingChoice && (
                 <div className="chooseSlot">
-                  <p>{pendingChoice.player.name} can play either position — sign him as:</p>
+                  <p>{mode === "impossible" ? `Pick #${pendingChoice.player.pick}` : pendingChoice.player.name} can play either position — sign him as:</p>
                   <div className="chooseRow">
                     {pendingChoice.options.map((slot) => (
                       <button key={slot} className="chooseBtn" onClick={() => finalizeDraft(pendingChoice.player, slot)}>

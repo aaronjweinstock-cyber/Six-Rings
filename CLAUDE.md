@@ -125,11 +125,17 @@ assistant and doesn't count.)
 - **Easy**: all ratings (OVR, skill bars, potential grade) visible while drafting.
 - **Hard**: OVR, bars, and grade are **hidden** (masked as "?") during the draft; you pick
   on names/reputation alone. Everything reveals once the five is locked (ready/results).
+- **Impossible**: everything Hard hides, **plus the player's name**. During the draft you
+  only see position and real pick number (e.g. "G #7") — nothing else. Multi-position slot
+  choice still works (referenced by pick number instead of name). Reveals everything once
+  the five is locked, same as Hard. Uses the **exact same simulation math** as Easy/Hard —
+  the difficulty is purely informational, not a harder win curve. Don't add mode-specific
+  odds tuning for Impossible without discussing it first.
   The draft board is always **sorted by real pick number** (#1 first) in every mode, so it
   reads like a real draft board rather than a power ranking, and rewards players who know
   actual draft history — this is deliberately consistent across modes, not just Hard.
-- `StatBlock` takes a `hidden` prop for the "?" masking. Both modes share the same player
-  pool — hard mode only changes *display/order*, not the data.
+- `StatBlock` takes a `hidden` prop for the "?" masking. All three modes share the same
+  player pool — mode only changes *display/order*, not the data.
 
 ---
 
