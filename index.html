@@ -10341,7 +10341,7 @@ function SixRings() {
     onClick: skipClass
   }, "SPIN AGAIN")) : /*#__PURE__*/React.createElement("div", {
     className: "playerGrid"
-  }, (mode === "hard" ? [...revealedClass.players].sort((a, b) => a.pick - b.pick) : revealedClass.players).map(p => {
+  }, [...revealedClass.players].sort((a, b) => a.pick - b.pick).map(p => {
     const {
       ok,
       posOK,

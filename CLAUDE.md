@@ -125,10 +125,9 @@ assistant and doesn't count.)
 - **Easy**: all ratings (OVR, skill bars, potential grade) visible while drafting.
 - **Hard**: OVR, bars, and grade are **hidden** (masked as "?") during the draft; you pick
   on names/reputation alone. Everything reveals once the five is locked (ready/results).
-  Also in **hard mode only**, the draft board is **sorted by real pick number** (#1 first)
-  so it reads like a real draft board rather than a power ranking (removes the
-  "top-of-list = best" information leak). Easy mode keeps career-value order (fine, since
-  numbers are visible).
+  The draft board is always **sorted by real pick number** (#1 first) in every mode, so it
+  reads like a real draft board rather than a power ranking, and rewards players who know
+  actual draft history — this is deliberately consistent across modes, not just Hard.
 - `StatBlock` takes a `hidden` prop for the "?" masking. Both modes share the same player
   pool — hard mode only changes *display/order*, not the data.
 

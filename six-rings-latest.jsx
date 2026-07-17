@@ -1921,7 +1921,7 @@ export default function SixRings() {
                     </div>
                   ) : (
                     <div className="playerGrid">
-                      {(mode === "hard" ? [...revealedClass.players].sort((a, b) => a.pick - b.pick) : revealedClass.players).map((p) => {
+                      {[...revealedClass.players].sort((a, b) => a.pick - b.pick).map((p) => {
                         const { ok, posOK, pickOK } = isEligible(p);
                         const reason = !pickOK ? `PICK #${p.pick} TAKEN` : !posOK ? "SLOT FULL" : null;
                         return (
