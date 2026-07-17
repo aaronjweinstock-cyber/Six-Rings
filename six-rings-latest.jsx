@@ -1173,7 +1173,7 @@ function computeCoachBonus(roster, rolls, coach) {
   return { total: fitPts + pedPts, fitPts, pedPts };
 }
 
-const WIN_THRESHOLD = 444;
+const WIN_THRESHOLD = 452;
 const WIN_SCALE = 29;
 const REDUND_THRESHOLD = 310;
 const REDUND_WEIGHT = 0.15;

@@ -152,15 +152,26 @@ For each of 15 years (`CURVE` = career arc, rookie ramp → prime plateau → de
   + pedigree points by rings (`5+ → 9, 3–4 → 6, 1–2 → 3, 0 → 0`). Hidden from the UI.
 - **Rating** = talent − shortfall + coachBonus.
 - **Win probability** that year = `logistic((rating - WIN_THRESHOLD) / WIN_SCALE)`,
-  with `WIN_THRESHOLD = 444`, `WIN_SCALE = 29`. Win is a random draw vs that probability
+  with `WIN_THRESHOLD = 452`, `WIN_SCALE = 29`. Win is a random draw vs that probability
   (smooth curve — deliberately replaced an older hard "best-of-29-opponents" threshold that
   created an all-or-nothing difficulty cliff).
+  `WIN_THRESHOLD` was raised from its original 444 after the modern-player ratings
+  consistency pass (see below) — correcting ~26 understated OVRs (Jokić, Jaylen Brown,
+  Anthony Davis, etc. to their real peak NBA 2K ratings) made star-heavy modern rosters
+  meaningfully stronger, so the threshold was retuned to keep the "hard to win" feel intact.
 
 ### Calibration (verified via Monte Carlo, keep it here)
-- Elite five (e.g. Curry/Kobe/LeBron/Malone/Shaq): ~6 rings avg, **7+ ~36%** of runs.
-- Good all-star five: ~1.5 avg, wins ≥1 ring ~82% of runs.
-- Weak role-player five: ~0.35 avg (usually shut out).
+- Elite five (e.g. Curry/Kobe/LeBron/Malone/Shaq): ~5.8 rings avg, **7+ ~30%** of runs.
+- Modern elite five (e.g. SGA/Kyrie/Luka/Tatum/AD, post ratings-fix): ~5.4 avg, 7+ ~19%.
+- Modern good five (e.g. Mitchell/Young/PG/Draymond/Sabonis, post ratings-fix): ~4.0 avg,
+  7+ ~3%, wins ≥1 ring ~99.5% of runs.
+- Weak role-player five: ~0.04 avg (almost always shut out).
 - Balanced team clearly beats a same-OVR lopsided team (redundancy working).
+- Note: a single global threshold can't perfectly re-flatten every lineup back to its
+  pre-ratings-fix odds, since the 26 corrected players didn't all gain the same amount —
+  a five stacked with the most-corrected players (e.g. "modern good five" above) will
+  still run somewhat hotter than it used to. That's expected, not a bug: those players
+  were genuinely undervalued before, so a team built around them should be stronger now.
 
 **If you change any of `WIN_THRESHOLD`, `WIN_SCALE`, `REDUND_THRESHOLD`, `REDUND_WEIGHT`,
 the coach bonus caps, or many OVRs — re-run a Monte Carlo** (simulate a few representative
