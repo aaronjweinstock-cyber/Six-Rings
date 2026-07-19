@@ -12567,6 +12567,62 @@ function pedigreeLabel(rings) {
 }
 const TOTAL_YEARS = 15;
 const TOTAL_SPINS = 5;
+
+// Leaderboard/analytics backend (Supabase). The anon key is meant to be public -
+// it only allows inserting a run and reading runs, per the table's RLS policies.
+const SUPABASE_URL = "https://bslfbofdrzsdkzjrcubd.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJzbGZib2ZkcnpzZGt6anJjdWJkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ0ODczMjEsImV4cCI6MjEwMDA2MzMyMX0.UM1w5ZrI8zkSRy98csQkOm-QYdGv-ApHP1mMrgRrVLk";
+
+// Fire-and-forget: log a finished run for the daily leaderboard and analytics.
+// Never blocks or surfaces errors to the player - if it fails (offline, ad
+// blocker, etc.) the game just continues normally.
+function submitRun(roster, coach, mode, rings) {
+  try {
+    fetch(`${SUPABASE_URL}/rest/v1/runs`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        Prefer: "return=minimal"
+      },
+      body: JSON.stringify({
+        rings,
+        mode,
+        coach_name: coach.name,
+        players: roster.map(p => ({
+          name: p.name,
+          slot: p.slot,
+          pick: p.pick,
+          classYear: p.classYear,
+          ovr: p.ovr
+        }))
+      })
+    }).catch(() => {});
+  } catch {
+    // ignore - never let a network hiccup affect gameplay
+  }
+}
+
+// Today's best run (highest rings, earliest submission on ties), across all players.
+async function fetchTodaysBest() {
+  try {
+    const startOfDayUTC = new Date();
+    startOfDayUTC.setUTCHours(0, 0, 0, 0);
+    const url = `${SUPABASE_URL}/rest/v1/runs?select=rings,mode,coach_name,players,created_at` + `&created_at=gte.${startOfDayUTC.toISOString()}` + `&order=rings.desc,created_at.asc&limit=1`;
+    const res = await fetch(url, {
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`
+      }
+    });
+    if (!res.ok) return null;
+    const rows = await res.json();
+    return rows.length ? rows[0] : null;
+  } catch {
+    return null;
+  }
+}
 const SLOT_NEED = {
   G: 2,
   F: 2,
@@ -13030,10 +13086,12 @@ function SixRings() {
   const [pendingChoice, setPendingChoice] = useState(null);
   const [simResult, setSimResult] = useState(null);
   const [visibleYears, setVisibleYears] = useState(0);
+  const [todaysBest, setTodaysBest] = useState(null);
   const coachTimer = useRef(null);
   const spinTimer = useRef(null);
   const simTimer = useRef(null);
   useEffect(() => {
+    fetchTodaysBest().then(setTodaysBest);
     return () => {
       clearInterval(coachTimer.current);
       clearInterval(spinTimer.current);
@@ -13125,6 +13183,7 @@ function SixRings() {
     setPhase("simming");
     const result = runSimulation(roster, coach);
     setSimResult(result);
+    submitRun(roster, coach, mode, result.rings);
     setVisibleYears(0);
     simTimer.current = setInterval(() => {
       setVisibleYears(v => {
@@ -13197,6 +13256,11 @@ function SixRings() {
         .modeDesc { font-size: 13px; line-height: 1.5; color: #8B96A5; }
         .hardBanner { background: rgba(193,68,58,0.12); border: 1px solid rgba(193,68,58,0.4); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12.5px; color: #E0958E; text-align: center; }
         .impossibleBanner { background: rgba(237,230,214,0.08); border: 1px solid rgba(237,230,214,0.3); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12.5px; color: #C9D0DA; text-align: center; }
+
+        .todaysBest { background: rgba(217,164,65,0.08); border: 1px solid rgba(217,164,65,0.35); border-radius: 10px; padding: 14px 18px; margin-bottom: 18px; text-align: center; }
+        .todaysBest .tbLabel { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1.5px; color: #D9A441; text-transform: uppercase; margin-bottom: 6px; }
+        .todaysBest .tbNames { font-size: 14px; color: #EDE6D6; margin-bottom: 4px; }
+        .todaysBest .tbMeta { font-size: 12px; color: #8B96A5; }
         .coachActions { display: flex; justify-content: center; gap: 10px; margin-top: 14px; }
         .coachBtnGold { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 14px; background: #D9A441; color: #1a1204; border: none; border-radius: 8px; padding: 11px 22px; cursor: pointer; }
         .coachBtnGold:hover:not(:disabled) { background: #E8BE5E; }
@@ -13287,7 +13351,15 @@ function SixRings() {
     className: "title"
   }, "SIX ", /*#__PURE__*/React.createElement("span", null, "RINGS")), /*#__PURE__*/React.createElement("div", {
     className: "subtitle"
-  }, "Draft five rookies. Live fifteen seasons. Try to beat Jordan."), phase === "modeSelect" && /*#__PURE__*/React.createElement("div", {
+  }, "Draft five rookies. Live fifteen seasons. Try to beat Jordan."), phase === "modeSelect" && todaysBest && /*#__PURE__*/React.createElement("div", {
+    className: "todaysBest"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "tbLabel"
+  }, "Today's Best — All Players"), /*#__PURE__*/React.createElement("div", {
+    className: "tbNames"
+  }, todaysBest.players.map(p => p.name.split(" ").pop()).join(", ")), /*#__PURE__*/React.createElement("div", {
+    className: "tbMeta"
+  }, todaysBest.rings, " ring", todaysBest.rings === 1 ? "" : "s", " under ", todaysBest.coach_name)), phase === "modeSelect" && /*#__PURE__*/React.createElement("div", {
     className: "card",
     style: {
       marginBottom: 18
