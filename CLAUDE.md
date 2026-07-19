@@ -230,9 +230,16 @@ shipping. This has been the discipline the whole project; don't eyeball it.
 
 ## Known open items / possible next steps
 
-- **Deploy to Vercel** (scaffold the React project, push, connect) — the main pending infra task.
-- Optional: literal full 30-deep first round per class (currently ~13–21 notable players per
-  class; deliberately not every forgettable pick). Big data add if ever wanted.
+- **Known bug, low priority:** intermittent wheel/coach-spin freeze on load — sometimes the
+  coach wheel doesn't start spinning after mode select. Not yet reproduced/root-caused.
+  Noted here rather than fixed blind; revisit if it starts happening more or a repro is found.
+- **Real hosting migration planned:** moving off GitHub Pages to Vercel (free tier) plus a
+  Supabase backend, to support real domain sharing, a daily best-lineup leaderboard, and
+  play analytics. Currently still zero-backend/zero-storage by design — this will be the
+  first time that changes.
+- Pre-2000 draft classes (1969–2001) and second-round busts were deliberately left out of
+  the "complete real first round" pass (item 5) — no real NBA 2K data exists for that era,
+  so it would be a much larger hand-estimation project. Revisit if wanted.
 - Optional polish: share-as-image card; sound; mobile spacing pass; per-run seed for
   reproducible shares.
 - Young-player (2019+) OVRs/grades are the most subjective ratings — revisit if any feel off.

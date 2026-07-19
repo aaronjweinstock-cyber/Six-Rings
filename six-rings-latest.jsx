@@ -1774,15 +1774,16 @@ function computeBestLineup(classYears, coach) {
   let best = null, bestVal = -Infinity;
   for (let a = 0; a < guards.length; a++) for (let b = a + 1; b < guards.length; b++) {
     const G1 = guards[a], G2 = guards[b];
-    if (G1.pick === G2.pick || G1.name === G2.name) continue;
+    if (G1.pick === G2.pick || G1.name === G2.name || G1.classYear === G2.classYear) continue;
     for (let c = 0; c < forwards.length; c++) for (let d = c + 1; d < forwards.length; d++) {
       const F1 = forwards[c], F2 = forwards[d];
       const four = [G1, G2, F1, F2];
       if (new Set(four.map((p) => p.name)).size < 4) continue;
       if (new Set(four.map((p) => p.pick)).size < 4) continue;
+      if (new Set(four.map((p) => p.classYear)).size < 4) continue;
       for (let e = 0; e < centers.length; e++) {
         const C = centers[e];
-        if (four.some((p) => p.name === C.name || p.pick === C.pick)) continue;
+        if (four.some((p) => p.name === C.name || p.pick === C.pick || p.classYear === C.classYear)) continue;
         const val = evaluatePeakTeam([G1, G2, F1, F2, C], coach);
         if (val > bestVal) { bestVal = val; best = [G1, G2, F1, F2, C]; }
       }
@@ -2354,6 +2355,21 @@ export default function SixRings() {
               </div>
               <div className="recapBox">{recap}</div>
 
+              <div className="bestLineup">
+                <div className="bestLineupHeader">YOUR FIVE</div>
+                <div className="rosterList">
+                  {byPosition(roster).map((p) => (
+                    <div className="rosterItem" key={p.name}>
+                      <span className={"slotTag " + p.slot}>{p.slot}</span>
+                      <span className="name">{p.name}</span>
+                      <StatBlock player={p} compact />
+                      <span className="pk">#{p.pick}</span>
+                      <span className="yr">{p.classYear}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               {bestLineup && (
                 <div className="bestLineup">
                   <div className="bestLineupHeader">
@@ -2366,6 +2382,7 @@ export default function SixRings() {
                         ? "This was sitting right there in the same classes you drafted from."
                         : "The optimal legal five from the exact classes you landed on.")}
                   </div>
+                  {!nailedIt && (
                   <div className="rosterList">
                     {byPosition(bestLineup).map((p) => (
                       <div className="rosterItem" key={p.name}>
@@ -2377,6 +2394,7 @@ export default function SixRings() {
                       </div>
                     ))}
                   </div>
+                  )}
                 </div>
               )}
 

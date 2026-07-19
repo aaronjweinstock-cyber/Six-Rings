@@ -12926,16 +12926,17 @@ function computeBestLineup(classYears, coach) {
   for (let a = 0; a < guards.length; a++) for (let b = a + 1; b < guards.length; b++) {
     const G1 = guards[a],
       G2 = guards[b];
-    if (G1.pick === G2.pick || G1.name === G2.name) continue;
+    if (G1.pick === G2.pick || G1.name === G2.name || G1.classYear === G2.classYear) continue;
     for (let c = 0; c < forwards.length; c++) for (let d = c + 1; d < forwards.length; d++) {
       const F1 = forwards[c],
         F2 = forwards[d];
       const four = [G1, G2, F1, F2];
       if (new Set(four.map(p => p.name)).size < 4) continue;
       if (new Set(four.map(p => p.pick)).size < 4) continue;
+      if (new Set(four.map(p => p.classYear)).size < 4) continue;
       for (let e = 0; e < centers.length; e++) {
         const C = centers[e];
-        if (four.some(p => p.name === C.name || p.pick === C.pick)) continue;
+        if (four.some(p => p.name === C.name || p.pick === C.pick || p.classYear === C.classYear)) continue;
         const val = evaluatePeakTeam([G1, G2, F1, F2, C], coach);
         if (val > bestVal) {
           bestVal = val;
@@ -13636,13 +13637,33 @@ function SixRings() {
     className: "ringTally"
   }, "Your five won ", /*#__PURE__*/React.createElement("b", null, simResult.rings), " ring", simResult.rings === 1 ? "" : "s", " in 15 seasons — Jordan has ", /*#__PURE__*/React.createElement("b", null, "6"), "."), /*#__PURE__*/React.createElement("div", {
     className: "recapBox"
-  }, recap), bestLineup && /*#__PURE__*/React.createElement("div", {
+  }, recap), /*#__PURE__*/React.createElement("div", {
+    className: "bestLineup"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "bestLineupHeader"
+  }, "YOUR FIVE"), /*#__PURE__*/React.createElement("div", {
+    className: "rosterList"
+  }, byPosition(roster).map(p => /*#__PURE__*/React.createElement("div", {
+    className: "rosterItem",
+    key: p.name
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "slotTag " + p.slot
+  }, p.slot), /*#__PURE__*/React.createElement("span", {
+    className: "name"
+  }, p.name), /*#__PURE__*/React.createElement(StatBlock, {
+    player: p,
+    compact: true
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "pk"
+  }, "#", p.pick), /*#__PURE__*/React.createElement("span", {
+    className: "yr"
+  }, p.classYear))))), bestLineup && /*#__PURE__*/React.createElement("div", {
     className: "bestLineup"
   }, /*#__PURE__*/React.createElement("div", {
     className: "bestLineupHeader"
   }, nailedIt ? "YOU DRAFTED THE OPTIMAL FIVE" : "THE BEST FIVE YOU COULD'VE BUILT"), /*#__PURE__*/React.createElement("div", {
     className: "bestLineupSub"
-  }, nailedIt ? "From the classes you landed on, no legal lineup beats what you drafted. Respect." : simResult.rings <= 1 ? "This was sitting right there in the same classes you drafted from." : "The optimal legal five from the exact classes you landed on."), /*#__PURE__*/React.createElement("div", {
+  }, nailedIt ? "From the classes you landed on, no legal lineup beats what you drafted. Respect." : simResult.rings <= 1 ? "This was sitting right there in the same classes you drafted from." : "The optimal legal five from the exact classes you landed on."), !nailedIt && /*#__PURE__*/React.createElement("div", {
     className: "rosterList"
   }, byPosition(bestLineup).map(p => /*#__PURE__*/React.createElement("div", {
     className: "rosterItem",
