@@ -13556,7 +13556,7 @@ function SixRings() {
     className: "hardBanner"
   }, "HARD MODE — ratings hidden. Draft on names alone; all stats reveal once your five is locked."), mode === "impossible" && /*#__PURE__*/React.createElement("div", {
     className: "impossibleBanner"
-  }, "IMPOSSIBLE MODE — no names, no ratings. Only position and real pick number. Everything reveals once your five is locked."), mode === "easy" && /*#__PURE__*/React.createElement("div", {
+  }, "IMPOSSIBLE MODE — no names, no ratings. Only position and real pick number. Everything reveals once your five is locked."), /*#__PURE__*/React.createElement("div", {
     className: "legendRow"
   }, /*#__PURE__*/React.createElement("div", {
     className: "legendItem",
@@ -13596,7 +13596,7 @@ function SixRings() {
     className: "slotTag " + p.slot
   }, p.slot), /*#__PURE__*/React.createElement("span", {
     className: "name"
-  }, mode === "impossible" ? "?" : p.name), p.grade && mode === "easy" && /*#__PURE__*/React.createElement("span", {
+  }, p.name), p.grade && /*#__PURE__*/React.createElement("span", {
     className: "gradeBadge",
     style: {
       color: gradeColor(p.grade),
@@ -13606,8 +13606,7 @@ function SixRings() {
     className: "potTag"
   }, "POT"), p.grade), /*#__PURE__*/React.createElement(StatBlock, {
     player: p,
-    compact: true,
-    hidden: mode === "hard" || mode === "impossible"
+    compact: true
   }), /*#__PURE__*/React.createElement("span", {
     className: "pk"
   }, "#", p.pick), /*#__PURE__*/React.createElement("span", {

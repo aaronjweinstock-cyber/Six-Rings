@@ -2322,7 +2322,6 @@ export default function SixRings() {
                 <div className="impossibleBanner">IMPOSSIBLE MODE &mdash; no names, no ratings. Only position and real pick number. Everything reveals once your five is locked.</div>
               )}
 
-              {mode === "easy" && (
               <div className="legendRow">
                 <div className="legendItem" style={{ color: "#D9A441" }}>
                   <b style={{ fontFamily: "'Anton', sans-serif", fontSize: 13 }}>##</b> OVR
@@ -2337,16 +2336,15 @@ export default function SixRings() {
                   <span className="gradeBadge" style={{ color: "#7FA6A3", borderColor: "#7FA6A3", fontSize: 10 }}><span className="potTag">POT</span>A</span> = Potential (prospects)
                 </div>
               </div>
-              )}
 
               {roster.length > 0 && (
                 <div className="rosterList">
                   {byPosition(roster).map((p, i) => (
                     <div className="rosterItem" key={p.name}>
                       <span className={"slotTag " + p.slot}>{p.slot}</span>
-                      <span className="name">{mode === "impossible" ? "?" : p.name}</span>
-                      {p.grade && mode === "easy" && <span className="gradeBadge" style={{ color: gradeColor(p.grade), borderColor: gradeColor(p.grade) }}><span className="potTag">POT</span>{p.grade}</span>}
-                      <StatBlock player={p} compact hidden={mode === "hard" || mode === "impossible"} />
+                      <span className="name">{p.name}</span>
+                      {p.grade && <span className="gradeBadge" style={{ color: gradeColor(p.grade), borderColor: gradeColor(p.grade) }}><span className="potTag">POT</span>{p.grade}</span>}
+                      <StatBlock player={p} compact />
                       <span className="pk">#{p.pick}</span>
                       <span className="yr">{p.classYear}</span>
                     </div>
