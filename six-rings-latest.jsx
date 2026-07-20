@@ -2035,6 +2035,7 @@ export default function SixRings() {
     setSpinLabel("SPIN");
     setCoach(null);
     setCoachLabel("???");
+    fetchTodaysBest().then(setTodaysBest);
   }
 
   const ringsSoFar = simResult ? simResult.log.slice(0, visibleYears).filter((y) => y.won).length : 0;
