@@ -649,7 +649,7 @@ const DRAFT_CLASSES = [
     { name: "Kyle Korver", pick: 49, pos: ["F"], scoring: 74, playmaking: 42, rebounding: 45, defense: 55, ovr: 76 },
   ]},
   { year: 2004, players: [
-    { name: "Dwight Howard", pick: 1, pos: ["C"], scoring: 80, playmaking: 45, rebounding: 92, defense: 92, ovr: 88 },
+    { name: "Dwight Howard", pick: 1, pos: ["C"], scoring: 80, playmaking: 45, rebounding: 92, defense: 92, ovr: 94 },
     { name: "Emeka Okafor", pick: 2, pos: ["C"], scoring: 66, playmaking: 40, rebounding: 80, defense: 80, ovr: 72 },
     { name: "Ben Gordon", pick: 3, pos: ["G"], scoring: 80, playmaking: 55, rebounding: 40, defense: 50, ovr: 76 },
     { name: "Shaun Livingston", pick: 4, pos: ["G"], scoring: 66, playmaking: 72, rebounding: 45, defense: 62, ovr: 68 },
