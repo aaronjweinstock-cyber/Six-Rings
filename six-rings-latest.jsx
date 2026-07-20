@@ -986,10 +986,10 @@ const DRAFT_CLASSES = [
   { year: 2014, players: [
     { name: "Andrew Wiggins", pick: 1, pos: ["F"], scoring: 78, playmaking: 48, rebounding: 52, defense: 60, ovr: 76 },
     { name: "Jabari Parker", pick: 2, pos: ["F"], scoring: 78, playmaking: 42, rebounding: 58, defense: 38, ovr: 80 },
-    { name: "Joel Embiid", pick: 3, pos: ["C"], scoring: 88, playmaking: 50, rebounding: 85, defense: 88, ovr: 90 },
-    { name: "Aaron Gordon", pick: 4, pos: ["F"], scoring: 72, playmaking: 48, rebounding: 62, defense: 72, ovr: 72 },
+    { name: "Joel Embiid", pick: 3, pos: ["C"], scoring: 88, playmaking: 50, rebounding: 85, defense: 88, ovr: 96 },
+    { name: "Aaron Gordon", pick: 4, pos: ["F"], scoring: 72, playmaking: 48, rebounding: 62, defense: 72, ovr: 84 },
     { name: "Dante Exum", pick: 5, pos: ["G"], scoring: 56, playmaking: 55, rebounding: 42, defense: 58, ovr: 56 },
-    { name: "Marcus Smart", pick: 6, pos: ["G"], scoring: 66, playmaking: 62, rebounding: 48, defense: 88, ovr: 74 },
+    { name: "Marcus Smart", pick: 6, pos: ["G"], scoring: 66, playmaking: 62, rebounding: 48, defense: 88, ovr: 80 },
     { name: "Julius Randle", pick: 7, pos: ["F"], scoring: 80, playmaking: 58, rebounding: 78, defense: 52, ovr: 80 },
     { name: "Nik Stauskas", pick: 8, pos: ["G"], scoring: 62, playmaking: 48, rebounding: 38, defense: 45, ovr: 60 },
     { name: "Noah Vonleh", pick: 9, pos: ["F", "C"], scoring: 55, playmaking: 38, rebounding: 64, defense: 55, ovr: 56 },
@@ -1054,7 +1054,7 @@ const DRAFT_CLASSES = [
   { year: 2016, players: [
     { name: "Ben Simmons", pick: 1, pos: ["G", "F"], scoring: 72, playmaking: 85, rebounding: 72, defense: 82, ovr: 80 },
     { name: "Brandon Ingram", pick: 2, pos: ["F"], scoring: 82, playmaking: 55, rebounding: 52, defense: 55, ovr: 78 },
-    { name: "Jaylen Brown", pick: 3, pos: ["G", "F"], scoring: 97, playmaking: 65, rebounding: 71, defense: 85, ovr: 95 },
+    { name: "Jaylen Brown", pick: 3, pos: ["G", "F"], scoring: 97, playmaking: 65, rebounding: 71, defense: 85, ovr: 93 },
     { name: "Dragan Bender", pick: 4, pos: ["F", "C"], scoring: 45, playmaking: 35, rebounding: 55, defense: 50, ovr: 52 },
     { name: "Kris Dunn", pick: 5, pos: ["G"], scoring: 58, playmaking: 58, rebounding: 45, defense: 72, ovr: 60 },
     { name: "Buddy Hield", pick: 6, pos: ["G"], scoring: 78, playmaking: 48, rebounding: 45, defense: 50, ovr: 74 },
@@ -1151,7 +1151,7 @@ const DRAFT_CLASSES = [
   ]},
   { year: 2019, players: [
     { name: "Zion Williamson", pick: 1, pos: ["F"], scoring: 88, playmaking: 55, rebounding: 78, defense: 58, ovr: 88, floor: 0.55 },
-    { name: "Ja Morant", pick: 2, pos: ["G"], scoring: 91, playmaking: 93, rebounding: 43, defense: 61, ovr: 92, floor: 0.7 },
+    { name: "Ja Morant", pick: 2, pos: ["G"], scoring: 91, playmaking: 93, rebounding: 43, defense: 61, ovr: 90, floor: 0.7 },
     { name: "RJ Barrett", pick: 3, pos: ["G","F"], scoring: 80, playmaking: 55, rebounding: 55, defense: 58, ovr: 79, floor: 0.75 },
     { name: "De'Andre Hunter", pick: 4, pos: ["F"], scoring: 70, playmaking: 42, rebounding: 48, defense: 68, ovr: 74, floor: 0.75 },
     { name: "Darius Garland", pick: 5, pos: ["G"], scoring: 80, playmaking: 78, rebounding: 32, defense: 50, ovr: 83, floor: 0.75 },
