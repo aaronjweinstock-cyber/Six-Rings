@@ -2048,7 +2048,16 @@ export default function SixRings() {
 
   function copyShare() {
     const names = roster.map((p) => p.name.split(" ").pop()).join(", ");
-    const text = `I drafted ${names} under ${coach.name}'s ${coach.system} and won ${simResult.rings} ring${simResult.rings === 1 ? "" : "s"} in 15 seasons. Jordan has 6. Beat me at SIX RINGS.`;
+    const r = simResult.rings;
+    const ringWord = `${r} ring${r === 1 ? "" : "s"}`;
+    const base = `I drafted ${names} under ${coach.name}'s ${coach.system} and`;
+    let line;
+    if (r >= 7) line = `${base} BEAT Michael Jordan — ${ringWord} in 15 seasons. Think you can top a dynasty?`;
+    else if (r === 6) line = `${base} TIED Michael Jordan at ${ringWord} in 15 seasons. Somebody beat this.`;
+    else if (r >= 4) line = `${base} won ${ringWord} in 15 seasons — a Hall of Fame run, still short of Jordan's 6. Beat me.`;
+    else if (r >= 1) line = `${base} won ${ringWord} in 15 seasons. Jordan has 6. Think you can do better?`;
+    else line = `${base} went 0-for-15. Embarrassing. Bet you can't do worse.`;
+    const text = `${line} SIX RINGS: https://six-rings.vercel.app/`;
     if (navigator.clipboard) navigator.clipboard.writeText(text);
   }
 
