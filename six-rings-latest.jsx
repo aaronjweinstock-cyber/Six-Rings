@@ -781,7 +781,7 @@ const DRAFT_CLASSES = [
     { name: "Marc Gasol", pick: 48, pos: ["C"], scoring: 78, playmaking: 62, rebounding: 78, defense: 85, ovr: 84 },
   ]},
   { year: 2008, players: [
-    { name: "Derrick Rose", pick: 1, pos: ["G"], scoring: 85, playmaking: 78, rebounding: 45, defense: 52, ovr: 86 },
+    { name: "Derrick Rose", pick: 1, pos: ["G"], scoring: 85, playmaking: 78, rebounding: 45, defense: 52, ovr: 95 },
     { name: "Michael Beasley", pick: 2, pos: ["F"], scoring: 76, playmaking: 45, rebounding: 62, defense: 45, ovr: 72 },
     { name: "O.J. Mayo", pick: 3, pos: ["G"], scoring: 74, playmaking: 55, rebounding: 45, defense: 52, ovr: 70 },
     { name: "Russell Westbrook", pick: 4, pos: ["G"], scoring: 92, playmaking: 84, rebounding: 76, defense: 61, ovr: 94 },
