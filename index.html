@@ -12604,23 +12604,29 @@ function submitRun(roster, coach, mode, rings) {
   }
 }
 
-// Today's best run (highest rings, earliest submission on ties), across all players.
+// Today's best run per mode (highest rings, earliest submission on ties).
+// Separate per mode since Easy/Hard/Impossible share identical sim odds - mixing them
+// would let a lucky easy-mode run bury a genuinely hard blind draft.
 async function fetchTodaysBest() {
   try {
     const startOfDayUTC = new Date();
     startOfDayUTC.setUTCHours(0, 0, 0, 0);
-    const url = `${SUPABASE_URL}/rest/v1/runs?select=rings,mode,coach_name,players,created_at` + `&created_at=gte.${startOfDayUTC.toISOString()}` + `&order=rings.desc,created_at.asc&limit=1`;
+    const url = `${SUPABASE_URL}/rest/v1/runs?select=rings,mode,coach_name,players,created_at` + `&created_at=gte.${startOfDayUTC.toISOString()}` + `&order=rings.desc,created_at.asc`;
     const res = await fetch(url, {
       headers: {
         apikey: SUPABASE_ANON_KEY,
         Authorization: `Bearer ${SUPABASE_ANON_KEY}`
       }
     });
-    if (!res.ok) return null;
+    if (!res.ok) return {};
     const rows = await res.json();
-    return rows.length ? rows[0] : null;
+    const best = {};
+    for (const row of rows) {
+      if (!best[row.mode]) best[row.mode] = row;
+    }
+    return best;
   } catch {
-    return null;
+    return {};
   }
 }
 const SLOT_NEED = {
@@ -13086,7 +13092,7 @@ function SixRings() {
   const [pendingChoice, setPendingChoice] = useState(null);
   const [simResult, setSimResult] = useState(null);
   const [visibleYears, setVisibleYears] = useState(0);
-  const [todaysBest, setTodaysBest] = useState(null);
+  const [todaysBest, setTodaysBest] = useState({});
   const coachTimer = useRef(null);
   const spinTimer = useRef(null);
   const simTimer = useRef(null);
@@ -13257,9 +13263,16 @@ function SixRings() {
         .hardBanner { background: rgba(193,68,58,0.12); border: 1px solid rgba(193,68,58,0.4); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12.5px; color: #E0958E; text-align: center; }
         .impossibleBanner { background: rgba(237,230,214,0.08); border: 1px solid rgba(237,230,214,0.3); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12.5px; color: #C9D0DA; text-align: center; }
 
-        .todaysBest { background: rgba(217,164,65,0.08); border: 1px solid rgba(217,164,65,0.35); border-radius: 10px; padding: 14px 18px; margin-bottom: 18px; text-align: center; }
+        .todaysBestGroup { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
+        .todaysBest { background: rgba(217,164,65,0.08); border: 1px solid rgba(217,164,65,0.35); border-radius: 10px; padding: 12px 18px; text-align: center; }
+        .todaysBest.hard { background: rgba(193,68,58,0.08); border-color: rgba(193,68,58,0.35); }
+        .todaysBest.impossible { background: rgba(237,230,214,0.06); border-color: rgba(237,230,214,0.3); }
         .todaysBest .tbLabel { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1.5px; color: #D9A441; text-transform: uppercase; margin-bottom: 6px; }
-        .todaysBest .tbNames { font-size: 14px; color: #EDE6D6; margin-bottom: 4px; }
+        .todaysBest.hard .tbLabel { color: #E0958E; }
+        .todaysBest.impossible .tbLabel { color: #EDE6D6; }
+        .todaysBest .tbNames { font-size: 13.5px; color: #EDE6D6; margin-bottom: 4px; font-family: 'IBM Plex Mono', monospace; }
+        .todaysBest .tbPos { opacity: 0.7; margin-right: 2px; }
+        .todaysBest .tbSep { color: #4A5568; margin: 0 7px; }
         .todaysBest .tbMeta { font-size: 12px; color: #8B96A5; }
         .coachActions { display: flex; justify-content: center; gap: 10px; margin-top: 14px; }
         .coachBtnGold { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 14px; background: #D9A441; color: #1a1204; border: none; border-radius: 8px; padding: 11px 22px; cursor: pointer; }
@@ -13351,15 +13364,28 @@ function SixRings() {
     className: "title"
   }, "SIX ", /*#__PURE__*/React.createElement("span", null, "RINGS")), /*#__PURE__*/React.createElement("div", {
     className: "subtitle"
-  }, "Draft five rookies. Live fifteen seasons. Try to beat Jordan."), phase === "modeSelect" && todaysBest && /*#__PURE__*/React.createElement("div", {
-    className: "todaysBest"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "tbLabel"
-  }, "Today's Best — All Players"), /*#__PURE__*/React.createElement("div", {
-    className: "tbNames"
-  }, todaysBest.players.map(p => p.name.split(" ").pop()).join(", ")), /*#__PURE__*/React.createElement("div", {
-    className: "tbMeta"
-  }, todaysBest.rings, " ring", todaysBest.rings === 1 ? "" : "s", " under ", todaysBest.coach_name)), phase === "modeSelect" && /*#__PURE__*/React.createElement("div", {
+  }, "Draft five rookies. Live fifteen seasons. Try to beat Jordan."), phase === "modeSelect" && ["easy", "hard", "impossible"].some(m => todaysBest[m]) && /*#__PURE__*/React.createElement("div", {
+    className: "todaysBestGroup"
+  }, ["easy", "hard", "impossible"].map(m => {
+    const run = todaysBest[m];
+    if (!run) return null;
+    return /*#__PURE__*/React.createElement("div", {
+      className: "todaysBest " + m,
+      key: m
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "tbLabel"
+    }, m.toUpperCase(), " — Today's Best"), /*#__PURE__*/React.createElement("div", {
+      className: "tbNames"
+    }, run.players.map((p, i) => /*#__PURE__*/React.createElement(React.Fragment, {
+      key: p.name
+    }, i > 0 && /*#__PURE__*/React.createElement("span", {
+      className: "tbSep"
+    }, "·"), /*#__PURE__*/React.createElement("span", {
+      className: "tbPos"
+    }, p.slot), " ", p.name, " ", p.ovr))), /*#__PURE__*/React.createElement("div", {
+      className: "tbMeta"
+    }, run.rings, " ring", run.rings === 1 ? "" : "s", " under ", run.coach_name));
+  })), phase === "modeSelect" && /*#__PURE__*/React.createElement("div", {
     className: "card",
     style: {
       marginBottom: 18
