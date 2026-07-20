@@ -13253,23 +13253,24 @@ function SixRings() {
         .ruleNum { flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%; background: #D9A441; color: #1a1204; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
         .modeRow { display: flex; gap: 12px; flex-wrap: wrap; }
         .modeBtn { flex: 1; min-width: 200px; background: #1C2530; border: 1.5px solid #2A3340; border-radius: 10px; padding: 20px 18px; cursor: pointer; text-align: left; transition: border-color 0.15s ease, background 0.15s ease; }
-        .modeBtn:hover { border-color: #D9A441; background: #232D3A; }
-        .modeBtn.hard:hover { border-color: #C1443A; }
-        .modeBtn.impossible:hover { border-color: #EDE6D6; }
-        .modeName { font-family: 'Anton', sans-serif; font-size: 26px; letter-spacing: 1px; color: #D9A441; margin-bottom: 8px; }
-        .modeBtn.hard .modeName { color: #C1443A; }
-        .modeBtn.impossible .modeName { color: #EDE6D6; }
+        .modeBtn:hover { border-color: #6FBF73; background: #232D3A; }
+        .modeBtn.hard:hover { border-color: #D9B441; }
+        .modeBtn.impossible:hover { border-color: #D9645A; }
+        .modeName { font-family: 'Anton', sans-serif; font-size: 26px; letter-spacing: 1px; color: #6FBF73; margin-bottom: 8px; }
+        .modeBtn.hard .modeName { color: #D9B441; }
+        .modeBtn.impossible .modeName { color: #D9645A; }
         .modeDesc { font-size: 13px; line-height: 1.5; color: #8B96A5; }
-        .hardBanner { background: rgba(193,68,58,0.12); border: 1px solid rgba(193,68,58,0.4); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12.5px; color: #E0958E; text-align: center; }
-        .impossibleBanner { background: rgba(237,230,214,0.08); border: 1px solid rgba(237,230,214,0.3); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12.5px; color: #C9D0DA; text-align: center; }
+        .easyBanner { background: rgba(111,191,115,0.12); border: 1px solid rgba(111,191,115,0.4); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12.5px; color: #9FDBA2; text-align: center; }
+        .hardBanner { background: rgba(217,180,65,0.12); border: 1px solid rgba(217,180,65,0.4); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12.5px; color: #E8CC7A; text-align: center; }
+        .impossibleBanner { background: rgba(217,100,90,0.12); border: 1px solid rgba(217,100,90,0.4); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12.5px; color: #E8968E; text-align: center; }
 
         .todaysBestGroup { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
-        .todaysBest { background: rgba(217,164,65,0.08); border: 1px solid rgba(217,164,65,0.35); border-radius: 10px; padding: 12px 18px; text-align: center; }
-        .todaysBest.hard { background: rgba(193,68,58,0.08); border-color: rgba(193,68,58,0.35); }
-        .todaysBest.impossible { background: rgba(237,230,214,0.06); border-color: rgba(237,230,214,0.3); }
-        .todaysBest .tbLabel { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1.5px; color: #D9A441; text-transform: uppercase; margin-bottom: 6px; }
-        .todaysBest.hard .tbLabel { color: #E0958E; }
-        .todaysBest.impossible .tbLabel { color: #EDE6D6; }
+        .todaysBest { background: rgba(111,191,115,0.08); border: 1px solid rgba(111,191,115,0.35); border-radius: 10px; padding: 12px 18px; text-align: center; }
+        .todaysBest.hard { background: rgba(217,180,65,0.08); border-color: rgba(217,180,65,0.35); }
+        .todaysBest.impossible { background: rgba(217,100,90,0.08); border-color: rgba(217,100,90,0.35); }
+        .todaysBest .tbLabel { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1.5px; color: #6FBF73; text-transform: uppercase; margin-bottom: 6px; }
+        .todaysBest.hard .tbLabel { color: #D9B441; }
+        .todaysBest.impossible .tbLabel { color: #D9645A; }
         .todaysBest .tbNames { font-size: 13.5px; color: #EDE6D6; margin-bottom: 4px; font-family: 'IBM Plex Mono', monospace; }
         .todaysBest .tbPos { opacity: 0.7; margin-right: 2px; }
         .todaysBest .tbSep { color: #4A5568; margin: 0 7px; }
@@ -13376,7 +13377,7 @@ function SixRings() {
       className: "tbLabel"
     }, m.toUpperCase(), " — Today's Best"), /*#__PURE__*/React.createElement("div", {
       className: "tbNames"
-    }, run.players.map((p, i) => /*#__PURE__*/React.createElement(React.Fragment, {
+    }, byPosition(run.players).map((p, i) => /*#__PURE__*/React.createElement(React.Fragment, {
       key: p.name
     }, i > 0 && /*#__PURE__*/React.createElement("span", {
       className: "tbSep"
@@ -13540,7 +13541,9 @@ function SixRings() {
       key: s.key,
       className: "slotPill" + (filled >= SLOT_NEED[s.key] ? " done" : "")
     }, /*#__PURE__*/React.createElement("b", null, s.label), " ", filled, "/", SLOT_NEED[s.key]);
-  })), mode === "hard" && /*#__PURE__*/React.createElement("div", {
+  })), mode === "easy" && /*#__PURE__*/React.createElement("div", {
+    className: "easyBanner"
+  }, "EASY MODE — ratings, skill bars, and potential grades are visible while you draft."), mode === "hard" && /*#__PURE__*/React.createElement("div", {
     className: "hardBanner"
   }, "HARD MODE — ratings hidden. Draft on names alone; all stats reveal once your five is locked."), mode === "impossible" && /*#__PURE__*/React.createElement("div", {
     className: "impossibleBanner"
