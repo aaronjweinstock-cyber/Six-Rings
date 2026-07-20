@@ -2047,7 +2047,7 @@ export default function SixRings() {
   const nailedIt = bestLineup && new Set(bestLineup.map((p) => p.name)).size === 5 &&
     roster.every((p) => bestLineup.some((b) => b.name === p.name));
 
-  function copyShare() {
+  function buildShareText() {
     const names = roster.map((p) => p.name.split(" ").pop()).join(", ");
     const r = simResult.rings;
     const ringWord = `${r} ring${r === 1 ? "" : "s"}`;
@@ -2058,8 +2058,17 @@ export default function SixRings() {
     else if (r >= 4) line = `${base} won ${ringWord} in 15 seasons — a Hall of Fame run, still short of Jordan's 6. Beat me.`;
     else if (r >= 1) line = `${base} won ${ringWord} in 15 seasons. Jordan has 6. Think you can do better?`;
     else line = `${base} went 0-for-15. Embarrassing. Bet you can't do worse.`;
-    const text = `${line} SIX RINGS: https://six-rings.vercel.app/`;
+    return `${line} SIX RINGS: https://six-rings.vercel.app/`;
+  }
+
+  function copyShare() {
+    const text = buildShareText();
     if (navigator.clipboard) navigator.clipboard.writeText(text);
+  }
+
+  function shareToX() {
+    const text = buildShareText();
+    window.open(`https://x.com/intent/tweet?text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
   }
 
   const eligiblePlayers = revealedClass ? revealedClass.players.filter((p) => isEligible(p).ok) : [];
@@ -2195,6 +2204,9 @@ export default function SixRings() {
 
         .shareBtn { display: block; margin: 0 auto 10px; background: transparent; border: 1.5px solid #3A4250; color: #EDE6D6; border-radius: 8px; padding: 11px 22px; font-family: 'Inter', sans-serif; font-weight: 600; cursor: pointer; }
         .shareBtn:hover { border-color: #D9A441; color: #D9A441; }
+        .shareRow { display: flex; gap: 10px; justify-content: center; margin-bottom: 10px; flex-wrap: wrap; }
+        .shareRow .shareBtn { margin: 0; }
+        .shareRow .shareBtn.xBtn:hover { border-color: #EDE6D6; color: #EDE6D6; }
 
         .footer { text-align: center; color: #4A5568; font-size: 12px; margin-top: 22px; line-height: 1.6; }
       `}</style>
@@ -2507,7 +2519,10 @@ export default function SixRings() {
                 </div>
               )}
 
-              <button className="shareBtn" onClick={copyShare}>COPY RESULT TO SHARE</button>
+              <div className="shareRow">
+                <button className="shareBtn" onClick={copyShare}>COPY RESULT TO SHARE</button>
+                <button className="shareBtn xBtn" onClick={shareToX}>SHARE TO X</button>
+              </div>
               <button className="again" onClick={reset}>DRAFT A NEW FIVE</button>
             </>
           )}

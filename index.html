@@ -13221,7 +13221,7 @@ function SixRings() {
   const recap = simResult && phase === "results" ? simResult.rings <= 1 ? buildRoast(simResult, roster, coach, simResult.rings) : buildRecap(simResult, roster, coach, simResult.rings) : "";
   const bestLineup = simResult && phase === "results" && coach ? computeBestLineup(roster.map(p => p.classYear), coach) : null;
   const nailedIt = bestLineup && new Set(bestLineup.map(p => p.name)).size === 5 && roster.every(p => bestLineup.some(b => b.name === p.name));
-  function copyShare() {
+  function buildShareText() {
     const names = roster.map(p => p.name.split(" ").pop()).join(", ");
     const r = simResult.rings;
     const ringWord = `${r} ring${r === 1 ? "" : "s"}`;
@@ -13232,8 +13232,15 @@ function SixRings() {
     else if (r >= 4) line = `${base} won ${ringWord} in 15 seasons — a Hall of Fame run, still short of Jordan's 6. Beat me.`;
     else if (r >= 1) line = `${base} won ${ringWord} in 15 seasons. Jordan has 6. Think you can do better?`;
     else line = `${base} went 0-for-15. Embarrassing. Bet you can't do worse.`;
-    const text = `${line} SIX RINGS: https://six-rings.vercel.app/`;
+    return `${line} SIX RINGS: https://six-rings.vercel.app/`;
+  }
+  function copyShare() {
+    const text = buildShareText();
     if (navigator.clipboard) navigator.clipboard.writeText(text);
+  }
+  function shareToX() {
+    const text = buildShareText();
+    window.open(`https://x.com/intent/tweet?text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
   }
   const eligiblePlayers = revealedClass ? revealedClass.players.filter(p => isEligible(p).ok) : [];
   return /*#__PURE__*/React.createElement("div", {
@@ -13367,6 +13374,9 @@ function SixRings() {
 
         .shareBtn { display: block; margin: 0 auto 10px; background: transparent; border: 1.5px solid #3A4250; color: #EDE6D6; border-radius: 8px; padding: 11px 22px; font-family: 'Inter', sans-serif; font-weight: 600; cursor: pointer; }
         .shareBtn:hover { border-color: #D9A441; color: #D9A441; }
+        .shareRow { display: flex; gap: 10px; justify-content: center; margin-bottom: 10px; flex-wrap: wrap; }
+        .shareRow .shareBtn { margin: 0; }
+        .shareRow .shareBtn.xBtn:hover { border-color: #EDE6D6; color: #EDE6D6; }
 
         .footer { text-align: center; color: #4A5568; font-size: 12px; margin-top: 22px; line-height: 1.6; }
       `), /*#__PURE__*/React.createElement("div", {
@@ -13789,10 +13799,15 @@ function SixRings() {
     className: "pk"
   }, "#", p.pick), /*#__PURE__*/React.createElement("span", {
     className: "yr"
-  }, p.classYear))))), /*#__PURE__*/React.createElement("button", {
+  }, p.classYear))))), /*#__PURE__*/React.createElement("div", {
+    className: "shareRow"
+  }, /*#__PURE__*/React.createElement("button", {
     className: "shareBtn",
     onClick: copyShare
   }, "COPY RESULT TO SHARE"), /*#__PURE__*/React.createElement("button", {
+    className: "shareBtn xBtn",
+    onClick: shareToX
+  }, "SHARE TO X")), /*#__PURE__*/React.createElement("button", {
     className: "again",
     onClick: reset
   }, "DRAFT A NEW FIVE"))), /*#__PURE__*/React.createElement("div", {
