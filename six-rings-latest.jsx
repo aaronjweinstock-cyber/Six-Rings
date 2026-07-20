@@ -2051,7 +2051,7 @@ export default function SixRings() {
     const names = roster.map((p) => p.name.split(" ").pop()).join(", ");
     const r = simResult.rings;
     const ringWord = `${r} ring${r === 1 ? "" : "s"}`;
-    const base = `I drafted ${names} under ${coach.name}'s ${coach.system} and`;
+    const base = `I drafted ${names} on ${mode.toUpperCase()} MODE under ${coach.name}'s ${coach.system} and`;
     let line;
     if (r >= 7) line = `${base} BEAT Michael Jordan — ${ringWord} in 15 seasons. Think you can top a dynasty?`;
     else if (r === 6) line = `${base} TIED Michael Jordan at ${ringWord} in 15 seasons. Somebody beat this.`;
