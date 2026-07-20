@@ -848,11 +848,11 @@ const DRAFT_CLASSES = [
     { name: "Marcus Thornton", pick: 43, pos: ["G"], scoring: 76, playmaking: 45, rebounding: 35, defense: 55, ovr: 72 },
   ]},
   { year: 2010, players: [
-    { name: "John Wall", pick: 1, pos: ["G"], scoring: 82, playmaking: 85, rebounding: 45, defense: 68, ovr: 84 },
+    { name: "John Wall", pick: 1, pos: ["G"], scoring: 82, playmaking: 85, rebounding: 45, defense: 68, ovr: 88 },
     { name: "Evan Turner", pick: 2, pos: ["G", "F"], scoring: 68, playmaking: 60, rebounding: 55, defense: 55, ovr: 68 },
     { name: "Derrick Favors", pick: 3, pos: ["F", "C"], scoring: 66, playmaking: 40, rebounding: 76, defense: 72, ovr: 70 },
     { name: "Wesley Johnson", pick: 4, pos: ["F"], scoring: 58, playmaking: 42, rebounding: 52, defense: 55, ovr: 58 },
-    { name: "DeMarcus Cousins", pick: 5, pos: ["C"], scoring: 85, playmaking: 55, rebounding: 85, defense: 62, ovr: 84 },
+    { name: "DeMarcus Cousins", pick: 5, pos: ["C"], scoring: 85, playmaking: 55, rebounding: 85, defense: 62, ovr: 90 },
     { name: "Ekpe Udoh", pick: 6, pos: ["F", "C"], scoring: 52, playmaking: 38, rebounding: 62, defense: 72, ovr: 60 },
     { name: "Greg Monroe", pick: 7, pos: ["F", "C"], scoring: 74, playmaking: 58, rebounding: 80, defense: 55, ovr: 74 },
     { name: "Al-Farouq Aminu", pick: 8, pos: ["F"], scoring: 58, playmaking: 42, rebounding: 66, defense: 72, ovr: 66 },
@@ -919,7 +919,7 @@ const DRAFT_CLASSES = [
   { year: 2012, players: [
     { name: "Anthony Davis", pick: 1, pos: ["F", "C"], scoring: 96, playmaking: 52, rebounding: 92, defense: 99, ovr: 98 },
     { name: "Michael Kidd-Gilchrist", pick: 2, pos: ["F"], scoring: 58, playmaking: 42, rebounding: 58, defense: 72, ovr: 62 },
-    { name: "Bradley Beal", pick: 3, pos: ["G"], scoring: 84, playmaking: 58, rebounding: 45, defense: 55, ovr: 80 },
+    { name: "Bradley Beal", pick: 3, pos: ["G"], scoring: 84, playmaking: 58, rebounding: 45, defense: 55, ovr: 88 },
     { name: "Dion Waiters", pick: 4, pos: ["G"], scoring: 74, playmaking: 50, rebounding: 40, defense: 50, ovr: 68 },
     { name: "Thomas Robinson", pick: 5, pos: ["F"], scoring: 55, playmaking: 38, rebounding: 66, defense: 55, ovr: 56 },
     { name: "Damian Lillard", pick: 6, pos: ["G"], scoring: 96, playmaking: 86, rebounding: 51, defense: 58, ovr: 94 },
